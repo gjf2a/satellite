@@ -1,5 +1,9 @@
+# Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 17, 18, 19
+# Does not solve: 6, 11, 14
+
 from satellite import *
 from pyhop_anytime import *
+import sys
 
 
 def start(state, goals):
@@ -9,8 +13,9 @@ def start(state, goals):
         return TaskList(tasks)
     else:
         pointings = get_pointings(state)
-        tasks = [[('turn_to', satellite, target, pointings[satellite]), ('start', goals)]
-                 for satellite, target in goals.pointing if not state.pointing.get((satellite, target), False)]
+        if hasattr(goals, 'pointing'):
+            tasks = [[('turn_to', satellite, target, pointings[satellite]), ('start', goals)]
+                     for satellite, target in goals.pointing if not state.pointing.get((satellite, target), False)]
         if len(tasks) > 0:
             return TaskList(tasks)
         else:
@@ -32,15 +37,12 @@ def set_up(state, satellite, instrument, target):
     if not state.calibrated.get(instrument, False):
         tasks.append(('find_calibrator_for', satellite, instrument))
     tasks.append(('activate', satellite, instrument, target))
-    print("***set_up tasks:", tasks)
     return TaskList(tasks)
 
 
 def find_calibrator_for(state, satellite, instrument):
-    result = TaskList([[('activate', satellite, instrument, d), ('calibrate', satellite, instrument, d)]
-                       for ((i, d), t) in state.calibration_target.items() if instrument == i])
-    print("***calibrator tasks:", result)
-    return result
+    return TaskList([[('activate', satellite, instrument, d), ('calibrate', satellite, instrument, d)]
+                     for ((i, d), t) in state.calibration_target.items() if instrument == i])
 
 
 def activate(state, satellite, instrument, target):
@@ -68,7 +70,21 @@ def make_satellite_planner():
 
 
 if __name__ == '__main__':
-    from strips_sat_x_1_0 import *
-    planner = make_satellite_planner()
-    plans = planner.anyhop(strips_sat_x_1_state, [('start', strips_sat_x_1_goals)], verbose=3)
-    print(plans)
+    if len(sys.argv) == 1:
+        print("Usage: python3 satellite_planner.py -v:[verbosity] -s:[max seconds] [planner_file]+")
+    else:
+        verbosity = 1
+        max_seconds = None
+        for filename in sys.argv[1:]:
+            if filename.startswith("-v"):
+                verbosity = int(filename.split(':')[1])
+            elif filename.startswith("-s"):
+                max_seconds = int(filename.split(':')[1])
+            else:
+                exec(f"from {filename} import *")
+                planner = make_satellite_planner()
+                plans = planner.anyhop(strips_sat_x_1_state, [('start', strips_sat_x_1_goals)], max_seconds=max_seconds, verbose=verbosity)
+                for (plan, time) in plans:
+                    print(plan)
+                    print(time)
+                print(len(plans), "total plans generated")
