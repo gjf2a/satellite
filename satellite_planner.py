@@ -1,4 +1,5 @@
 # Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 17, 18, 19
+# More than one plan in 1 second: 1(2), 5 (2), 7 (2), 12 (3)
 # Does not solve: 6, 11, 14
 
 from satellite import *
@@ -86,5 +87,6 @@ if __name__ == '__main__':
                 plans = planner.anyhop(strips_sat_x_1_state, [('start', strips_sat_x_1_goals)], max_seconds=max_seconds, verbose=verbosity)
                 for (plan, time) in plans:
                     print(plan)
-                    print(time)
+                for (plan, time) in plans:
+                    print(f"Length: {len(plan)} time: {time}")
                 print(len(plans), "total plans generated")
