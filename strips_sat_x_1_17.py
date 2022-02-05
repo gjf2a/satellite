@@ -1,15 +1,15 @@
 from pyhop_anytime import *
 
 strips_sat_x_1_state = State('strips_sat_x_1_state')
-strips_sat_x_1_state.calibration_target = {('instrument0','star0'):True,('instrument1','star2'):True,('instrument2','star3'):True,('instrument3','star4'):True,('instrument4','star4'):True,('instrument5','groundstation1'):True,('instrument6','star4'):True,('instrument7','star2'):True,('instrument8','star2'):True,('instrument9','star4'):True}
-strips_sat_x_1_state.on_board = {('instrument0','satellite0'):True,('instrument1','satellite0'):True,('instrument2','satellite0'):True,('instrument3','satellite1'):True,('instrument4','satellite1'):True,('instrument5','satellite2'):True,('instrument6','satellite3'):True,('instrument7','satellite4'):True,('instrument8','satellite4'):True,('instrument9','satellite4'):True}
-strips_sat_x_1_state.pointing = {('satellite0','planet16'):True,('satellite1','star4'):True,('satellite2','star15'):True,('satellite3','phenomenon6'):True,('satellite4','star14'):True}
-strips_sat_x_1_state.power_avail = {'satellite0':True,'satellite1':True,'satellite2':True,'satellite3':True,'satellite4':True}
-strips_sat_x_1_state.supports = {('instrument0','infrared1'):True,('instrument0','spectrograph4'):True,('instrument1','infrared0'):True,('instrument1','infrared1'):True,('instrument2','infrared0'):True,('instrument2','infrared1'):True,('instrument3','infrared0'):True,('instrument3','spectrograph4'):True,('instrument4','infrared0'):True,('instrument4','infrared3'):True,('instrument4','thermograph2'):True,('instrument5','infrared1'):True,('instrument6','infrared1'):True,('instrument7','infrared1'):True,('instrument7','infrared3'):True,('instrument8','infrared0'):True,('instrument8','infrared3'):True,('instrument8','spectrograph4'):True,('instrument9','infrared1'):True,('instrument9','infrared3'):True,('instrument9','spectrograph4'):True}
-strips_sat_x_1_state.calibrated = {}
-strips_sat_x_1_state.have_image = {}
-strips_sat_x_1_state.power_on = {}
+strips_sat_x_1_state.calibration_target = {('instrument0','star0'),('instrument1','star2'),('instrument2','star3'),('instrument3','star4'),('instrument4','star4'),('instrument5','groundstation1'),('instrument6','star4'),('instrument7','star2'),('instrument8','star2'),('instrument9','star4')}
+strips_sat_x_1_state.on_board = {('instrument0','satellite0'),('instrument1','satellite0'),('instrument2','satellite0'),('instrument3','satellite1'),('instrument4','satellite1'),('instrument5','satellite2'),('instrument6','satellite3'),('instrument7','satellite4'),('instrument8','satellite4'),('instrument9','satellite4')}
+strips_sat_x_1_state.pointing = {('satellite0','planet16'),('satellite1','star4'),('satellite2','star15'),('satellite3','phenomenon6'),('satellite4','star14')}
+strips_sat_x_1_state.power_avail = {'satellite0','satellite1','satellite2','satellite3','satellite4'}
+strips_sat_x_1_state.supports = {('instrument0','infrared1'),('instrument0','spectrograph4'),('instrument1','infrared0'),('instrument1','infrared1'),('instrument2','infrared0'),('instrument2','infrared1'),('instrument3','infrared0'),('instrument3','spectrograph4'),('instrument4','infrared0'),('instrument4','infrared3'),('instrument4','thermograph2'),('instrument5','infrared1'),('instrument6','infrared1'),('instrument7','infrared1'),('instrument7','infrared3'),('instrument8','infrared0'),('instrument8','infrared3'),('instrument8','spectrograph4'),('instrument9','infrared1'),('instrument9','infrared3'),('instrument9','spectrograph4')}
+strips_sat_x_1_state.calibrated = set()
+strips_sat_x_1_state.have_image = set()
+strips_sat_x_1_state.power_on = set()
 
 strips_sat_x_1_goals = State('strips_sat_x_1_goals')
-strips_sat_x_1_goals.have_image = {('phenomenon13','spectrograph4'):True,('phenomenon17','spectrograph4'):True,('phenomenon21','thermograph2'):True,('phenomenon24','infrared0'):True,('phenomenon6','spectrograph4'):True,('planet10','thermograph2'):True,('planet11','infrared3'):True,('planet16','infrared1'):True,('planet20','thermograph2'):True,('planet5','infrared0'):True,('planet8','infrared1'):True,('star14','thermograph2'):True,('star15','infrared3'):True,('star18','spectrograph4'):True,('star19','thermograph2'):True,('star22','infrared1'):True,('star23','spectrograph4'):True,('star7','infrared0'):True,('star9','spectrograph4'):True}
+strips_sat_x_1_goals.have_image = {('phenomenon13','spectrograph4'),('phenomenon17','spectrograph4'),('phenomenon21','thermograph2'),('phenomenon24','infrared0'),('phenomenon6','spectrograph4'),('planet10','thermograph2'),('planet11','infrared3'),('planet16','infrared1'),('planet20','thermograph2'),('planet5','infrared0'),('planet8','infrared1'),('star14','thermograph2'),('star15','infrared3'),('star18','spectrograph4'),('star19','thermograph2'),('star22','infrared1'),('star23','spectrograph4'),('star7','infrared0'),('star9','spectrograph4')}
 
