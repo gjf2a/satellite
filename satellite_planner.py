@@ -1,5 +1,5 @@
 # Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18, 19
-# More than one plan in 1 second: 1(2), 5 (2), 8 (2), 11 (2), 12 (3), 14 (3)
+# More than one plan in 1 second: 1(5), 5 (2), 8 (2), 11 (2), 12 (3), 14 (3)
 # Does not solve: 6, 17
 
 from satellite import *
@@ -37,8 +37,16 @@ def set_up(state, satellite, instrument, target):
     tasks = []
     if not state.calibrated.get(instrument, False):
         tasks.append(('find_calibrator_for', satellite, instrument))
-    tasks.append(('activate', satellite, instrument, target))
+    tasks.append(('aim', satellite, target))
     return TaskList(tasks)
+
+
+def aim(state, satellite, target):
+    tasks = []
+    if not state.pointing.get((satellite, target), False):
+        pointings = get_pointings(state)
+        tasks.append(('turn_to', satellite, target, pointings[satellite]))
+    return TaskList(tasks, completed=True)
 
 
 def find_calibrator_for(state, satellite, instrument):
@@ -59,14 +67,6 @@ def activate(state, satellite, instrument, target):
     return TaskList(tasks, completed=True)
 
 
-def turn(state, s, d_new):
-    d_prev = [d for ((s1, d), t) in state.pointing.items() if t and s1 == s]
-    if state.pointing.get((s,d_prev), False) and d_new != d_prev:
-        state.pointing[(s,d_new)] = True
-        state.pointing[(s,d_prev)] = False
-        return state
-
-
 def make_satellite_planner():
     planner = Planner()
     planner.declare_operators(calibrate, switch_off, switch_on, take_image, turn_to)
@@ -75,6 +75,7 @@ def make_satellite_planner():
     planner.declare_methods('set_up', set_up)
     planner.declare_methods('find_calibrator_for', find_calibrator_for)
     planner.declare_methods('activate', activate)
+    planner.declare_methods('aim', aim)
     return planner
 
 
