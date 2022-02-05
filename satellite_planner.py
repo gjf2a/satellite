@@ -1,6 +1,6 @@
-# Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 17, 18, 19
-# More than one plan in 1 second: 1(2), 5 (2), 7 (2), 12 (3)
-# Does not solve: 6, 11, 14
+# Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18, 19
+# More than one plan in 1 second: 1(2), 5 (2), 8 (2), 11 (2), 12 (3), 14 (3)
+# Does not solve: 6, 17
 
 from satellite import *
 from pyhop_anytime import *
@@ -24,7 +24,7 @@ def start(state, goals):
 
 
 def get_pointings(state):
-    return {satellite: target for ((satellite, target), t) in state.pointing.items()}
+    return {satellite: target for ((satellite, target), t) in state.pointing.items() if t}
 
 
 def plan_photo(state, target, mode):
@@ -43,7 +43,7 @@ def set_up(state, satellite, instrument, target):
 
 def find_calibrator_for(state, satellite, instrument):
     return TaskList([[('activate', satellite, instrument, d), ('calibrate', satellite, instrument, d)]
-                     for ((i, d), t) in state.calibration_target.items() if instrument == i])
+                     for ((i, d), t) in state.calibration_target.items() if t and instrument == i])
 
 
 def activate(state, satellite, instrument, target):
@@ -53,10 +53,18 @@ def activate(state, satellite, instrument, target):
         tasks.append(('turn_to', satellite, target, pointings[satellite]))
     if not state.power_on.get(instrument, False):
         if not state.power_avail.get(satellite, False):
-            already_on = [i for ((i, s), t) in state.on_board.items() if state.power_on.get(i, False) and s == satellite]
+            already_on = [i for ((i, s), t) in state.on_board.items() if t and state.power_on.get(i, False) and s == satellite]
             tasks.append(('switch_off', already_on[0], satellite))
         tasks.append(('switch_on', instrument, satellite))
     return TaskList(tasks, completed=True)
+
+
+def turn(state, s, d_new):
+    d_prev = [d for ((s1, d), t) in state.pointing.items() if t and s1 == s]
+    if state.pointing.get((s,d_prev), False) and d_new != d_prev:
+        state.pointing[(s,d_new)] = True
+        state.pointing[(s,d_prev)] = False
+        return state
 
 
 def make_satellite_planner():
@@ -80,7 +88,7 @@ if __name__ == '__main__':
             if filename.startswith("-v"):
                 verbosity = int(filename.split(':')[1])
             elif filename.startswith("-s"):
-                max_seconds = int(filename.split(':')[1])
+                max_seconds = float(filename.split(':')[1])
             else:
                 exec(f"from {filename} import *")
                 planner = make_satellite_planner()
