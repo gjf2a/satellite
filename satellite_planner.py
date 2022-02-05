@@ -1,6 +1,5 @@
-# Solves: 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 15, 16, 18, 19
-# More than one plan in 1 second: 1(5), 5 (2), 8 (2), 11 (2), 12 (3), 14 (3)
-# Does not solve: 6, 17
+# Solves: All
+# More than one plan in 1 second: 1 (4), 5 (2), 6 (3), 7 (3), 8 (4), 10 (3), 11 (2), 12 (4), 14 (6), 16 (2), 17 (3), 18 (2)
 
 from satellite import *
 from pyhop_anytime import *
@@ -34,11 +33,7 @@ def plan_photo(state, target, mode):
 
 
 def set_up(state, satellite, instrument, target):
-    tasks = []
-    if not state.calibrated.get(instrument, False):
-        tasks.append(('find_calibrator_for', satellite, instrument))
-    tasks.append(('aim', satellite, target))
-    return TaskList(tasks)
+    return TaskList([('find_calibrator_for', satellite, instrument), ('aim', satellite, target)])
 
 
 def aim(state, satellite, target):
@@ -50,15 +45,15 @@ def aim(state, satellite, target):
 
 
 def find_calibrator_for(state, satellite, instrument):
-    return TaskList([[('activate', satellite, instrument, d), ('calibrate', satellite, instrument, d)]
-                     for ((i, d), t) in state.calibration_target.items() if t and instrument == i])
+    if state.calibrated.get(instrument, False) and state.power_on.get(instrument, False):
+        return TaskList(completed=True)
+    else:
+        return TaskList([[('activate', satellite, instrument, d), ('calibrate', satellite, instrument, d)]
+                         for ((i, d), t) in state.calibration_target.items() if t and instrument == i])
 
 
 def activate(state, satellite, instrument, target):
-    tasks = []
-    if not state.pointing.get((satellite, target), False):
-        pointings = get_pointings(state)
-        tasks.append(('turn_to', satellite, target, pointings[satellite]))
+    tasks = [('aim', satellite, target)]
     if not state.power_on.get(instrument, False):
         if not state.power_avail.get(satellite, False):
             already_on = [i for ((i, s), t) in state.on_board.items() if t and state.power_on.get(i, False) and s == satellite]
