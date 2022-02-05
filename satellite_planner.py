@@ -65,12 +65,7 @@ def activate(state, satellite, instrument, target):
 def make_satellite_planner():
     planner = Planner()
     planner.declare_operators(calibrate, switch_off, switch_on, take_image, turn_to)
-    planner.declare_methods('start', start)
-    planner.declare_methods('plan_photo', plan_photo)
-    planner.declare_methods('set_up', set_up)
-    planner.declare_methods('find_calibrator_for', find_calibrator_for)
-    planner.declare_methods('activate', activate)
-    planner.declare_methods('aim', aim)
+    planner.declare_methods(start, plan_photo, set_up, find_calibrator_for, activate, aim)
     return planner
 
 
