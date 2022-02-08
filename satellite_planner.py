@@ -4,7 +4,6 @@
 
 from satellite import *
 from pyhop_anytime import *
-import sys
 
 
 def start(state, goals):
