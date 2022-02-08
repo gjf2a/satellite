@@ -71,22 +71,4 @@ def make_satellite_planner():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print("Usage: python3 satellite_planner.py -v:[verbosity] -s:[max seconds] [planner_file]+")
-    else:
-        verbosity = 1
-        max_seconds = None
-        for filename in sys.argv[1:]:
-            if filename.startswith("-v"):
-                verbosity = int(filename.split(':')[1])
-            elif filename.startswith("-s"):
-                max_seconds = float(filename.split(':')[1])
-            else:
-                exec(f"from {filename} import *")
-                planner = make_satellite_planner()
-                plans = planner.anyhop(strips_sat_x_1_state, [('start', strips_sat_x_1_goals)], max_seconds=max_seconds, verbose=verbosity)
-                for (plan, time) in plans:
-                    print(plan)
-                for (plan, time) in plans:
-                    print(f"Length: {len(plan)} time: {time}")
-                print(len(plans), "total plans generated")
+    anyhop_main(make_satellite_planner())
