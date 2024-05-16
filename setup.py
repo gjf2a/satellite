@@ -7,5 +7,6 @@ setup(
     url='https://github.com/gjf2a/satellite',
     author='Gabriel Ferrer',
     author_email='ferrer@hendrix.edu',
-    license='Apache 2.0'
+    license='Apache 2.0',
+    packages=['satellite']
 )

@@ -2,7 +2,7 @@
 # More than one plan in 1 second: 1 (4), 5 (2), 6 (3), 7 (3), 8 (4), 10 (3), 11 (2), 12 (4), 14 (6), 16 (2), 17 (3), 18 (2)
 # Even more plans with 3 seconds: 1 (7)
 
-from satellite import *
+from satellite.satellite import *
 from pyhop_anytime import *
 
 
