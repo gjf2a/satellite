@@ -70,4 +70,5 @@ def make_satellite_planner():
 
 
 if __name__ == '__main__':
-    anyhop_main(make_satellite_planner())
+    #anyhop_main(make_satellite_planner())
+    anyhop_args(make_satellite_planner(), ["strips_sat_x_1_17.py", "-s:2"])
